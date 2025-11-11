@@ -9,11 +9,24 @@
 <body>
     <button id="start-button">start game</button>
 
-    <h1>Player HP: <span id="player_hp"></span></h1>
-    <h1>Enemy HP: <span id="enemy_hp"></span></h1>
+    <div class="board">
 
-    <ul id="combat-log">
-        <li class="log-message"><span class="type"></span>  :  <span class="msg"></span></li>
+        <div id="player" class="entity">
+            <img src="images/player.png" alt="">
+            <h1>Player HP: <span id="player_hp"></span></h1>
+        </div>
+
+        <div id="enemy" class="entity">
+            <img src="images/enemy.png" alt="">
+            <h1>Enemy HP: <span id="enemy_hp"></span></h1>
+        </div>
+    </div>
+
+    
+    
+
+    <ul id="combat-log" class="gray_container">
+        <li class="log-message brighter_container invisible"><span class="type"></span>  :  <span class="msg"></span></li>
     </ul>
     
     <script src="main.js"></script>

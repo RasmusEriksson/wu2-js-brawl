@@ -1,0 +1,97 @@
+:root {
+    --nicegray: rgb(184, 161, 161);
+    --brightgray: rgb(224, 201, 201);
+}
+
+@keyframes hit_anim {
+    0% {
+        transform: scale(1,1);
+    }
+    15% {
+        transform: scale(0.75,0.75);
+    }
+    100%  {
+        transform: scale(1,1);
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(0,1)
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+
+
+.invisible {
+    display: none;
+}
+
+.gray_container {
+    list-style: none;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    background-color: var(--nicegray);
+
+    outline-style: double;
+    outline-width: 0.25rem;
+    border-radius: 0.25rem;
+
+    margin-inline: 2rem;
+    min-height: 5rem;
+
+}
+
+.brighter_container {
+    background-color: var(--brightgray);
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.board {
+    display: flex;
+    justify-content: space-around;
+    padding-block: 2rem;
+    margin-block: 3rem;
+    width: 100%;
+    background-color: var(--brightgray);
+    
+}
+
+.entity {
+    display: flex;
+    flex-direction: column;
+
+    img {
+        border-radius: 0.5rem;
+    }
+}
+
+
+.hit {
+    animation-name: hit_anim;
+    animation-timing-function: ease-out;
+    animation-duration: 0.25s;
+}
+
+.make_appear {
+    transform-origin:left;
+    animation-name: appear;
+    animation-timing-function: ease-out;
+    animation-duration: 0.15s;
+    animation-fill-mode: forwards;
+}
+
+.make_dissappear {
+    animation-name: appear;
+    animation-timing-function: ease-in-out;
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+    animation-duration: 0.4s;
+
+}
