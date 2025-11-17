@@ -1,8 +1,14 @@
-const playerContainer = document.getElementById("player_hp")
-const enemyContainer = document.getElementById("enemy_hp")
+const board = document.getElementsByClassName("board")[0]
 
-const player = document.getElementById("player")
-const enemy = document.getElementById("enemy")
+const playerContainer = document.getElementById("player_hp")
+let enemyContainer =  undefined
+
+const player_card = document.getElementById("player")
+const og_enemy_card = document.getElementsByClassName("enemy")[0]
+let enemy_card = undefined
+
+const p_roll = document.querySelector("#player_roll")
+let e_roll = undefined
 
 const startButton = document.querySelector("#start-button")
 
@@ -21,8 +27,14 @@ function animateNode(node,animation) {
     node.classList.remove(animation);
     void node.offsetWidth;
     node.classList.add(animation);
+    setTimeout(() => {
+        if (animation == "killed") {
+            node.remove()
+        }
+        node.classList.remove(animation);
+    },500)
+    
 }
-
 function combatlog(msg,type) {
     const newLog = logMessage.cloneNode(true)
     const msg_container = newLog.getElementsByClassName("msg")[0]
@@ -41,65 +53,154 @@ function combatlog(msg,type) {
         let remove_log = logs[0]
         logContainer.removeChild(remove_log)
     }
-}
-    
-
+} 
 // returns a number value between given interval, 
 // min is minimum return and max is maximum return
 function randi_range(min,max) {
     let range = (max-min) + 1
     return min + Math.floor(Math.random() * range)
 }
+function update_stats() {
+    p_roll.textContent = player_roll
+   
 
-    
+    playerContainer.textContent = playerHp
+   
 
-startButton.addEventListener("click",startGame)
+    if (currentEnemy) {
+        enemyContainer.textContent = currentEnemy.hp
+        e_roll.textContent = enemy_roll
+    }
+}  
 
-function startGame() {
-    let playerHp = 100
-    let enemyHp = 100
-    //a function which is the main loop for the game
-    let game = setInterval(() =>{
-        //rolls a 20-sided dice for both player and enemy
-        let player_roll = randi_range(1,20)
-        let enemy_roll = randi_range(1,20)
-        
-        //checks if player- or enemyroll is higher, the one who has higher hits the other
-        //if they roll the same they both block and nothing happens
-        if (player_roll > enemy_roll) {
-            combatlog("player hits enemy for:  " + String(player_roll),"Good")
-            enemyHp-= player_roll
-            animateNode(enemy,"hit")
+class enemy {
+    constructor(name,hp,attack,speed) {
+        this.name = name
+        this.hp = hp
+        this.attack = attack
+        this.speed = speed
+    }
+}
+
+let player_speed = 1
+
+let last = 0
+let player_wait = 0
+let enemy_wait = 0
+let game_wait = 0
+
+
+let currentEnemy = undefined
+let playerHp = 100
+let player_roll = randi_range(1,20)
+let enemy_roll = 0
+
+
+update_stats()
+
+function make_new_enemy() {
+    currentEnemy = new enemy("spurt", randi_range(20,50),randi_range(10,20),randi_range(1,3))
+    enemy_card = og_enemy_card.cloneNode(true)
+
+    enemyContainer = enemy_card.getElementsByClassName("enemy_hp")[0]
+    e_roll = enemy_card.getElementsByClassName("enemy_roll")[0]
+
+    board.appendChild(enemy_card)
+    enemy_card.classList.remove("invisible")
+    animateNode(enemy_card,"make_appear")
+    update_stats()
+}
+
+function kill_enemy() {
+    animateNode(enemy_card,"killed")
+    game_wait = 2000
+    currentEnemy = undefined
+}
+
+function player_attack() {
+    player_roll = randi_range(1,20)
+    animateNode(p_roll,"make_appear")
+
+    if (player_roll > enemy_roll) {
+        combatlog("player hits enemy for:  " + String(player_roll),"Good")
+        currentEnemy.hp -= player_roll
+        animateNode(enemy_card,"hit")
+
+        if (currentEnemy.hp <= 0){
+            kill_enemy()
         }
-        else if (enemy_roll > player_roll) {
-            combatlog("enemy hits player for:  " + String(enemy_roll),"Bad")
-            playerHp -= enemy_roll
-            animateNode(player,"hit")
-        }
-        else {
-            animateNode(player,"hit")
-            animateNode(enemy,"hit")
-            combatlog("Both block, nothing happens","Neutral")
-        }
-        playerContainer.textContent = playerHp
-        enemyContainer.textContent = enemyHp
+    }
+    else {
+        animateNode(enemy_card,"block")
+        combatlog("The enemy blocks your attack!!:  ","Bad")
+    }
+    update_stats()
+}
 
-        //Checks if either enemy or player has 0 or less hp, if true then it ends the game
-        if (enemyHp <= 0 || playerHp <= 0) {
-            clearInterval(game)
-            //prints out the winner depending on which character has the highest hp
+function enemy_attack() {
+    enemy_roll = randi_range(1,currentEnemy.attack)
+    animateNode(e_roll,"make_appear")
 
-            if (enemyHp > playerHp) {
-                combatlog("ENEMY WINS!","Terrible")
-            }
-            else {
-                combatlog("PLAYER WINS!","Incredible")
-            }
-        }
-    },1000)
+    if (enemy_roll > player_roll) {
+        combatlog("Enemy hits you for:  " + String(enemy_roll),"Good")
+        playerHp -= enemy_roll
+        animateNode(player_card,"hit")
+    }
+    else {
+        animateNode(player_card,"block")
+        combatlog("You block the enemy's attack!!!:  ","Good")
+    }
+    update_stats()
 }
 
 
+
+
+
+
+
+
+function gameLoop(Timestamp) {
+    if (last === 0) {
+        last = Timestamp
+    }
+    let delta = Timestamp - last
+    last = Timestamp
+
+    if (game_wait <= 0){
+        if (!currentEnemy) {
+            make_new_enemy()
+        }
+        
+        if (!isNaN(delta)) {
+            player_wait += delta
+            enemy_wait += delta
+        }
+
+        if (player_wait > player_speed * 1000) {
+            player_attack()
+            player_wait = 0
+        }
+
+        if (currentEnemy) {
+            if (enemy_wait > currentEnemy.speed * 1000) {
+                enemy_attack()
+                enemy_wait = 0
+            }
+        }
+
+        
+    }
+    else {
+        game_wait -= delta
+    }
+
+    
+        
+    round = window.requestAnimationFrame(gameLoop)
+}
+
+startButton.addEventListener("click",gameLoop)
 
 
 
