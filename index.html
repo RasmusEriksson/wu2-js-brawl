@@ -14,12 +14,21 @@
         <div id="player" class="entity">
             <img src="images/player.png" alt="">
             <h1>Player HP: <span id="player_hp"></span></h1>
+            <div class="statboard">
+                <li><img src="images/icons/hp.jpg" alt="icon"><h2>hp:100</h2></li>
+                <li><img src="images/icons/attack.jpg" alt="icon"><h2>attack:20</h2></li>
+                <li><img src="images/icons/speed.jpg" alt="icon"><h2>speed:1s</h2></li>
+            </div>
             <h2>Current Roll: <span id="player_roll"></span></h2>
         </div>
 
         <div class="enemy invisible entity">
             <img src="images/enemy.png" alt="">
             <h1>Enemy HP: <span class="enemy_hp"></span></h1>
+            <ul class="statboard">
+                <li class="og_stat invisible"><img src="images/icons/hp.jpg" alt="icon" class="stat_img"><h2 class="stat_text">hp:100</h2></li>
+                
+            </ul>
             <h2>Current Roll: <span class="enemy_roll"></span></h2>
         </div>
     </div>

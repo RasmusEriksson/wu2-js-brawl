@@ -1,6 +1,29 @@
 :root {
     --nicegray: rgb(184, 161, 161);
     --brightgray: rgb(224, 201, 201);
+    --good: rgb(194, 233, 187);
+    --bad: rgb(236, 155, 155);
+
+    --space-3xs: clamp(0.3125rem, 0.1847rem + 0.5682vw, 0.625rem);
+    --space-2xs: clamp(0.625rem, 0.3693rem + 1.1364vw, 1.25rem);
+    --space-xs: clamp(0.9375rem, 0.554rem + 1.7045vw, 1.875rem);
+    --space-s: clamp(1.25rem, 0.7386rem + 2.2727vw, 2.5rem);
+    --space-m: clamp(1.875rem, 1.108rem + 3.4091vw, 3.75rem);
+    --space-l: clamp(2.5rem, 1.4773rem + 4.5455vw, 5rem);
+    --space-xl: clamp(3.75rem, 2.2159rem + 6.8182vw, 7.5rem);
+    --space-2xl: clamp(5rem, 2.9545rem + 9.0909vw, 10rem);
+    --space-3xl: clamp(7.5rem, 4.4318rem + 13.6364vw, 15rem);
+    --space-entity: clamp(10rem, 6.4318rem + 16.6364vw, 22.5rem);
+
+    --step--2: clamp(0.7813rem, 0.7081rem + 0.325vw, 0.96rem);
+    --step--1: clamp(0.9375rem, 0.8301rem + 0.4773vw, 1.2rem);
+    --step-0: clamp(1.125rem, 0.9716rem + 0.6818vw, 1.5rem);
+    --step-1: clamp(1.35rem, 1.1352rem + 0.9545vw, 1.875rem);
+    --step-2: clamp(1.62rem, 1.3239rem + 1.3159vw, 2.3438rem);
+    --step-3: clamp(1.944rem, 1.5408rem + 1.7922vw, 2.9297rem);
+    --step-4: clamp(2.3328rem, 1.789rem + 2.4169vw, 3.6621rem);
+    --step-5: clamp(2.7994rem, 2.0719rem + 3.2332vw, 4.5776rem);
+    
 }
 
 @keyframes hit_anim {
@@ -50,6 +73,14 @@
 }
 
 
+.bad {
+    background-color: var(--bad) !important;
+}
+
+.good {
+    background-color: var(--good) !important;
+}
+
 
 .invisible{
     display: none !important;
@@ -63,11 +94,13 @@
     background-color: var(--nicegray);
 
     outline-style: double;
-    outline-width: 0.25rem;
-    border-radius: 0.25rem;
+    outline-width: var(--space-3xs);
+    border-radius: var(--space-3xs);
 
-    margin-inline: 2rem;
-    min-height: 5rem;
+    padding: 0;
+
+    margin-inline: var(--space-l);
+    min-height: var(--space-l);
 
 }
 
@@ -80,29 +113,61 @@
 .board {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     padding-block: 2rem;
     margin-block: 3rem;
     width: 100%;
     background-color: var(--brightgray);
+    height: min-content;
     
 }
 
 .entity {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    font-size: var(--step--1);
 
-    width: 12.5rem;
+    width: var(--space-entity);
 
     img {
+        width: var(--space-3xl);
         border-radius: 0.5rem;
     }
 }
+
+.statboard {
+    margin: 0;
+    font-size: var(--step--2);
+    padding: 0;
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    li {
+        width: fit-content;
+        background-color: white;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+
+        img {
+            width: var(--space-s);
+            height: var(--space-s);
+        }
+    }
+}
+
+
 
 
 .hit {
     animation-name: hit_anim;
     animation-timing-function: ease-out;
-    animation-duration: 0.15s;
+    animation-duration: 0.25s;
 }
 
 .make_appear {

@@ -1,13 +1,15 @@
 const board = document.getElementsByClassName("board")[0]
 
 const playerContainer = document.getElementById("player_hp")
-let enemyContainer =  undefined
-
 const player_card = document.getElementById("player")
-const og_enemy_card = document.getElementsByClassName("enemy")[0]
-let enemy_card = undefined
-
 const p_roll = document.querySelector("#player_roll")
+
+
+const og_enemy_card = document.getElementsByClassName("enemy")[0]
+const og_stat = document.getElementsByClassName("og_stat")[0]
+let enemyContainer =  undefined
+let enemy_statboard = undefined
+let enemy_card = undefined
 let e_roll = undefined
 
 const startButton = document.querySelector("#start-button")
@@ -42,6 +44,13 @@ function combatlog(msg,type) {
 
     newLog.classList.remove("invisible")
     animateNode(newLog,"make_appear")
+
+    if (type == "Good"){
+        newLog.classList.add("good")
+    }
+    else if (type == "Bad"){
+        newLog.classList.add("bad")
+    }
 
     msg_container.textContent = msg
     type_container.textContent = type
@@ -104,6 +113,30 @@ function make_new_enemy() {
 
     enemyContainer = enemy_card.getElementsByClassName("enemy_hp")[0]
     e_roll = enemy_card.getElementsByClassName("enemy_roll")[0]
+    enemy_statboard = enemy_card.getElementsByClassName("statboard")[0]
+
+    let stats = {"hp" : currentEnemy.hp,"attack" : currentEnemy.attack,"speed" : currentEnemy.speed}
+
+    for (const [stat, value] of Object.entries(stats)) {
+        let new_stat = og_stat.cloneNode(true)
+        new_stat.classList.remove("invisible")
+        enemy_statboard.appendChild(new_stat)
+
+        let stat_text = new_stat.getElementsByClassName("stat_text")[0]
+        if (stat == "speed") {
+            stat_text.textContent = `${stat}: ${value}s`
+        }
+        else {
+            stat_text.textContent = `${stat}: ${value}`
+        }
+        
+
+
+        let stat_image = new_stat.getElementsByClassName("stat_img")[0]
+        stat_image.src=`images/icons/${stat}.jpg`
+        
+    }
+
 
     board.appendChild(enemy_card)
     enemy_card.classList.remove("invisible")
