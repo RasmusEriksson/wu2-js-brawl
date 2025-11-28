@@ -16,15 +16,9 @@ const startButton = document.querySelector("#start-button")
 
 const logContainer = document.querySelector("#combat-log")
 const logMessage = document.getElementsByClassName("log-message")[0]
-const max_logs = 6
-
-const playerName = "mimimi"
+const max_logs = 6  
 
 function animateNode(node,animation) {
-    // node.addEventListener("animationend webkitanimationEnd oAnimationEnd MSAnimationEnd", function() {
-    //     node.classList.remove(animation)
-    //     console.log("removed!")
-    // })
 
     node.classList.remove(animation);
     void node.offsetWidth;
@@ -190,9 +184,6 @@ function enemy_attack() {
 
 
 
-
-
-
 function gameLoop(Timestamp) {
     if (last === 0) {
         last = Timestamp
@@ -226,6 +217,8 @@ function gameLoop(Timestamp) {
     }
     else {
         game_wait -= delta
+        player_wait = 0
+        enemy_wait = 0
     }
 
     
@@ -233,7 +226,13 @@ function gameLoop(Timestamp) {
     round = window.requestAnimationFrame(gameLoop)
 }
 
-startButton.addEventListener("click",gameLoop)
+function start_game_loop() {
+    animateNode(startButton,"killed")
+    gameLoop()
+}
+   
+
+startButton.addEventListener("click",start_game_loop)
 
 
 
